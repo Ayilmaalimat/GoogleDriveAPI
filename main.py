@@ -20,6 +20,13 @@ google = GoogleAPI()
 #             ['10pumJciJBybm18vRBozFoOSIahVWvex9', '1rVNBk2oTNDGruCJFFmSLoY1TiXs6aAP1'])
 # google.copy() 1 argument - id of the file, 2 argument - list of the file's ids where you want to copy
 
-google.info('1UZATbBRNVAq547uEc-Ep1IFa0v5NU-HM')
+
+# google.info('1UZATbBRNVAq547uEc-Ep1IFa0v5NU-HM')
 # google.info('id') show info about file
 # google.info('id') 1 argument - id of the folder,
+
+
+# google.move('1UZATbBRNVAq547uEc-Ep1IFa0v5NU-HM',
+#            '1scRABQFMzvpx0-BTTGc_lVrG94hOcKOY')
+# google.move move files from one folder to another
+# google.move 1 argument - id of the folder where your files, 2 argument - id of the folder where you want to move all files

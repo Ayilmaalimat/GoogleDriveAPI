@@ -85,3 +85,23 @@ class GoogleAPI():
         df = pd.DataFrame(files)
         print(df)
         return df
+
+    def move(self, from_folder, to_folder):
+        query = "parents = '{}'".format(from_folder)
+
+        response = service.files().list(q=query).execute()
+        files = response.get('files')
+        nextPageToken = response.get('nextPageToken')
+
+        while nextPageToken:
+            response = service.files().list(q=query, pageToken=nextPageToken).execute()
+            files.extend(response.get('files'))
+            nextPageToken = response.get('nextPageToken')
+
+        for x in files:
+            if x['mimeType'] != 'application/vnd.google-apps.folder':
+                service.files().update(
+                    fileId=x.get('id'),
+                    addParents=to_folder,
+                    removeParents=from_folder
+                ).execute()
