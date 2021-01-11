@@ -3,6 +3,7 @@ from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
 import os
 import mimetypes
 import io
+import pandas as pd
 
 CLIENT_SECRET_FILE = 'credentials.json'
 API_NAME = 'drive'
@@ -68,3 +69,19 @@ class GoogleAPI():
                 fileId=file_id,
                 body=file_metadata
             ).execute()
+
+    def info(self, folder_id):
+        query = "parents = '{}'".format(folder_id)
+
+        response = service.files().list(q=query).execute()
+        files = response.get('files')
+        nextPageToken = response.get('nextPageToken')
+
+        while nextPageToken:
+            response = service.files().list(q=query).execute()
+            files.extend(response.get('files'))
+            nextPageToken = response.get('nextPageToken')
+
+        df = pd.DataFrame(files)
+        print(df)
+        return df
