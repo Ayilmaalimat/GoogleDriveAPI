@@ -30,3 +30,6 @@ google = GoogleAPI()
 #            '1scRABQFMzvpx0-BTTGc_lVrG94hOcKOY')
 # google.move move files from one folder to another
 # google.move 1 argument - id of the folder where your files, 2 argument - id of the folder where you want to move all files
+
+google.backup()
+# google.backup() download all files from google disk on the computer

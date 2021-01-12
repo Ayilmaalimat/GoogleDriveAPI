@@ -84,7 +84,6 @@ class GoogleAPI():
 
         df = pd.DataFrame(files)
         print(df)
-        return df
 
     def move(self, from_folder, to_folder):
         query = "parents = '{}'".format(from_folder)
@@ -105,3 +104,52 @@ class GoogleAPI():
                     addParents=to_folder,
                     removeParents=from_folder
                 ).execute()
+
+    def backup(self):
+        driveQuery = "(mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or " \
+            " mimeType = 'text/csv' or mimeType = 'application/pdf' or mimeType = 'image/jpeg' or mimeType = 'text/html')"
+
+        driveQuery = driveQuery + ' and ' "trashed = false and 'me' in owners "
+
+        fieldsString = 'files(id, mimeType, parents, name)'
+
+        response = service.files().list(
+            pageSize=1000,
+            q=driveQuery,
+            fields=fieldsString
+        ).execute()
+
+        lstFiles = response['files']
+        nextPageToken = response.get('nextPageToken')
+
+        while nextPageToken:
+            response = service.files().list(
+                pageSize=1000,
+                q=driveQuery,
+                fields=fieldsString,
+                pageToken=nextPageToken
+            ).execute()
+
+            lstFiles.extend(response['files'])
+            nextPageToken = response.get('nextPageToken')
+
+        for item in lstFiles:
+            if not item['name'].startswith('~$'):
+                request = service.files().get_media(fileId=item['id'])
+
+                fh = io.BytesIO()
+                downloader = MediaIoBaseDownload(fh, request)
+
+                done = False
+                while not done:
+                    status, done = downloader.next_chunk()
+                    print('Download progress {0:.0%}'.format(
+                        int(status.progress())))
+
+                fh.seek(0)
+                file_name = item['name']
+
+                with open(os.path.join('./backups', file_name), 'wb') as f:
+                    f.write(fh.read())
+                    f.close()
+        print('finished')
