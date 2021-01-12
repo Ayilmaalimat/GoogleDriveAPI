@@ -158,13 +158,13 @@ class GoogleAPI():
                     f.close()
         print('finished')
 
-    def __thread(self):
-        schedule.every(5).seconds.do(self.__downloadAll)
+    def __thread(self, time_in_sec):
+        schedule.every(time_in_sec).seconds.do(self.__downloadAll)
 
         while True:
             schedule.run_pending()
             time.sleep(1)
 
-    def backup(self):
-        my_thread = threading.Thread(target=self.__thread)
+    def backup(self, time_in_sec):
+        my_thread = threading.Thread(target=self.__thread(time_in_sec))
         my_thread.start()
