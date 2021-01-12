@@ -4,6 +4,10 @@ import os
 import mimetypes
 import io
 import pandas as pd
+import schedule
+import time
+import threading
+
 
 CLIENT_SECRET_FILE = 'credentials.json'
 API_NAME = 'drive'
@@ -105,7 +109,7 @@ class GoogleAPI():
                     removeParents=from_folder
                 ).execute()
 
-    def backup(self):
+    def __downloadAll(self):
         driveQuery = "(mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or " \
             " mimeType = 'text/csv' or mimeType = 'application/pdf' or mimeType = 'image/jpeg' or mimeType = 'text/html')"
 
@@ -153,3 +157,14 @@ class GoogleAPI():
                     f.write(fh.read())
                     f.close()
         print('finished')
+
+    def __thread(self):
+        schedule.every(5).seconds.do(self.__downloadAll)
+
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
+    def backup(self):
+        my_thread = threading.Thread(target=self.__thread)
+        my_thread.start()

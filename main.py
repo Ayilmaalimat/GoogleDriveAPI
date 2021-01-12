@@ -2,7 +2,7 @@ from GoogleAPI import GoogleAPI
 
 google = GoogleAPI()
 
-# google.create(["my_folders"])
+google.create(["my_folders"])
 # google.create(['name']) get a list with a name
 
 
