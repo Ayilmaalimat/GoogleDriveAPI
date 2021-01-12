@@ -27,6 +27,12 @@ class GoogleAPI():
 
         service.files().create(body=file_metadata).execute()
 
+    def delete(self, file_id):
+        try:
+            service.files().delete(fileId=file_id).execute()
+        except:
+            print('File not found')
+
     def download(self, file_ids, file_names):
 
         for file_id, file_name in zip(file_ids, file_names):

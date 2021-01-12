@@ -2,8 +2,11 @@ from GoogleAPI import GoogleAPI
 
 google = GoogleAPI()
 
-google.create(["my_folders"])
+# google.create(["New folder"])
 # google.create(['name']) get a list with a name
+
+# google.delete('1DcMmM44vHpeyDXNLvcFEzvpZIfznija6')
+# google.delete('str') 1 argument - id of the folder to delete
 
 
 # google.upload('1UZATbBRNVAq547uEc-Ep1IFa0v5NU-HM', [
@@ -31,5 +34,5 @@ google.create(["my_folders"])
 # google.move move files from one folder to another
 # google.move 1 argument - id of the folder where your files, 2 argument - id of the folder where you want to move all files
 
-google.backup(10)
+# google.backup(10)
 # google.backup(secs) download all files from google disk on the computer
